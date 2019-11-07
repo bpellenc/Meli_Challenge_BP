@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>API Challenge - No se encontró el recurso solicitado</title>
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap@4.0.0/dist/css/bootstrap.min.css" type="text/css">
+  </head>
+  <body>
+    <div class="container" style="padding:20px">
+      <h1 style="text-align:center">Error 404: No se encontró el recurso solicitado.</h1>
+      <h2 style="text-align:center">Redirigiendo al índice en <div id="n">5</div> segundo<i id='s'>s</i>...</h2>
+    </div>
+
+    <script>
+
+      function tick(){
+          if(document.getElementById('n').innerText !== '1'){
+            document.getElementById('n').innerText = document.getElementById('n').innerText - 1;
+            if(document.getElementById('n').innerText === '1'){
+              document.getElementById('s').innerText = '';
+            }
+          }else{
+            window.location.replace('{{ url_for("index") }}')
+          }
+
+      }
+
+      setInterval(tick, 1000);
+
+    </script>
+  </body>
+</html>

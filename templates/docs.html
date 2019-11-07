@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>API Challenge - Documentación</title>
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap@4.0.0/dist/css/bootstrap.min.css" type="text/css">
+  </head>
+  <body>
+    <div class="container" style="padding:20px">
+      <h1>Documentación de la API</h1>
+      <p>Se desarrollo esta API para un desafio propuesto por MercadoLibre y expone una REST API que permite interactuar con una cuenta de Google Drive ofreciendo dos funciones: buscar texto contenido en un archivo y crear un archivo nuevo.</p>
+      <ol>
+        <li><a href="#inst">Instalación del server y requisitos</a></li>
+        <li><a href="#uso">Uso de la Api</a></li>
+        <li><a href="#funciones">Funciones utilizadas</a></li>
+      </ol>
+      <h2 id="inst">Instalación del server y requisitos</h2>
+      <p>Este servidor fue realizado utilizando <b>Python 3.7</b> y las extensiones de Python <b>Flask 1.1.1</b> y <b>google-api-python-client 1.7.11</b>. Se selecciono Python para el desarrollo debido a su simplicidad para diseñar nuevos proyectos. Flask fue elegido porque en la busqueda de alternativas lo proponian por la sencillez de su API. google-api-python-client fue utilizado para facilitar las operaciones con la API de Google Drive.</p>
+
+      <h3>Instalación</h3>
+      <p>Prerequisitos</p>
+      <ol>
+        <li>Tener <b>Python 3.7</b> instalado y su administrador de paquetes, <b>pip</b></li>
+      </ol>
+      <p>Pasos</p>
+      <ol>
+        <li>Clonar el repositorio: https://github.com/bpellenc/Meli_Challenge_BP</li>
+        <li>Ejecutar el comando <b>pip install -r requirements.txt</b> dentro de la carpeta del servidor</li>
+        <li>Para ejecutar el servidor utilizar el comando <b>python main.py</b></li>
+        <li>Para acceder a la API, desde cualquier navegador ingresar a localhost:5000. En caso de conflicto de puertos, se debe modificar manualmente al final del archivo <b>main.py</b>, el parámetro llamado <b>port</b></li>
+      </ol>
+
+      <h2 id="uso">Uso de la API</h2>
+        <h3 id="buscar">Buscar una palabra en un documento - GET</h3>
+        <p>A esta función se accede mediante el endpoint <b>/search-in-doc/:id</b>, en donde <b>:id</b> represanta el código de identificación del archivo en Google Drive.</p>
+        <h4>Parámetros:</h4>
+        <ul>
+          <li>word: una cadena de texto que será buscada en el archivo</li>
+        </ul>
+        <h4>Posibles respuestas HTTP:</h4>
+        <ul>
+          <li>HTTP/1.1 200 SE ENCONTRÓ: La palabra especificada fue hallada en el archivo</li>
+          <li>HTTP/1.1 400 POR FAVOR INCLUYA UNA PALABRA A BUSCAR: No se coloco parametro de busqueda</li>
+          <li>HTTP/1.1 404 PALABRA NO ENCONTRADA: Palabra no encontrada en el archivo</li>
+          <li>HTTP/1.1 404 ARCHIVO NO ENCONTRADO: No se encontro ningun archivo asociado al codigo de identificaciòn provisto</li>
+          <li>HTTP/1.1 401 Para obtener acceso a su cuenta de Drive y habilitar la API diríjase al índice de la página: Este error es causado cuando la autorización para acceder a la cuenta caduca o no fue realizada aún, lo cual se soluciona accediendo al <a href="{{ url_for('index') }}">índice.</a></li>
+        </ul>
+        <h3 id="nuevodoc">Crear un nuevo archivo - POST</h3>
+        <p>A esta función se accede mediante el endpoint <b>/file</b> y sirve para crear un nuevo archivo. De cada archivo creado en Google Drive se guarda una copia local en la carpeta <i>files</i>, dentro de la carpeta en donde sea ejecutado el servidor.</p>
+        <h4>Parámetros:</h4>
+        <p>Los parámetros deberan estar alojados en los datos de formulario de la solicitud</p>
+        <ul>
+          <li> <i>titulo</i>: El título o nombre del nuevo archivo </li>
+          <li> <i>descripcion</i>: El contenido del nuevo archivo</li>
+        </ul>
+        <h4>Posibles respuestas HTTP:</h4>
+        <ul>
+          <li>HTTP/1.1 400 PARÁMETROS INCORRECTOS: No existen los parametros <i>titulo</i> o <i>descripcion</i> en la solicitud POST.</li>
+          <li>HTTP/1.1 200 NUEVO ARCHIVO CREADO<br>{'id':id, 'titulo': titulo, 'descripcion': descripcion }<br>Indica la creación exitosa del archivo y devuelve sus datos principales.</li>
+          <li>HTTP/1.1 401 Para obtener acceso a su cuenta de Drive y habilitar la API diríjase al índice de la página: Este error es causado cuando la autorización para acceder a la cuenta caduca o no fue realizada aún, lo cual se soluciona accediendo al <a href="{{ url_for('index') }}">índice.</a></li>
+          <li>HTTP/1.1 500 ERROR EN LA CONEXIÓN: Indica un error en la conexion con la API de Google Drive, puede ser causado al caducir la autorización de acceso, lo cual se soluciona accediendo al <a href="{{ url_for('index') }}">índice.</a></li>
+        </ul>
+
+      <h2 id="funciones">Funciones utilizadas en el desarrollo</h2>
+      <h3>Vistas</h3>
+      <p>Las vistas son las funciones que están relacionadas directamente con una URL del servidor, o en el caso de los error handlers, con un error.</p>
+      <ul>
+        <li>not_found</li>
+        <p>Esta vista es la encargada de presentar una interfaz amigable al usuario en caso de que este introduzca una URL inválida. Se relaciona con la plantilla <i>error404.html</i></p>
+        <li>index</li>
+        <p>Esta vista es la encargada de mostrar la página principal al usuario y de redireccionarlo en caso de que no esté activa ninguna cuenta de Google Drive, para lo cual redirecciona a la vista <i>oauth2callback</i></p>
+        <li>docs</li>
+        <p>Esta vista es la encargada de mostrar la documentación, que es esta misma página. Se relaciona con la plantila <i>docs.html</i></p>
+        <li>search_in_doc</li>
+        <p>Esta vista es la encargada de realizar la función de <a href="#buscar">buscar en un documento</a> y toma un parametro string que utilizará como id al momento de buscar. Maneja los posibles errores que pueden surgir, informando mediante el código de respuesta HTTP y un mensaje corto.</p>
+        <li>file</li>
+        <p>Esta vista es la encargada de realizar la función de <a href="#nuevodoc">crear un nuevo documento</a>. Maneja los posibles errores que pueden surgir, informando mediante el código de respuesta HTTP y un mensaje corto.</p>
+        <li>oauth2callback</li>
+        <p>Esta vista es una de las mas importantes y es la encargada de derivar el proceso de confirmacion de uso de Google Drive a Google. Para ello utiliza el id de cliente de API proporcionado por google y creado específicamente para este proyecto. Si la confirmación es exitosa, Google devuelve un código que servira como token de autorización para las llamadas que se realizarán a la API. Este token es guardado en el archivo local <i>credentials.json</i></p>
+      </ul>
+      <h3>Otros</h3>
+      <ul>
+        <li>get_credentials</li>
+        <p>Esta función es utilizada para obtener el archivo local que contiene las credenciales de acceso a la cuenta de Google Drive del usuario y validar las mismas. Es usada extensivamente en el programa para comprobar si está autorizado el acceso a la cuenta de Google Drive.</p>
+      </ul>
+
+    </div>
+  </body>
+</html>
