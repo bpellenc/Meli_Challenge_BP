@@ -1,6 +1,6 @@
 # Documentación de la API
 
-Se desarrollo esta API para un desafio propuesto por MercadoLibre y expone una REST API que permite interactuar con una cuenta de Google Drive ofreciendo dos funciones: buscar texto contenido en un archivo y crear un archivo nuevo.
+Se desarrollo esta API para un desafio propuesto por MercadoLibre y expone una REST API que permite interactuar con una cuenta de Google Drive ofreciendo dos funciones: **buscar texto contenido en un archivo y crear un archivo nuevo.**
 
 ## Instalación
 Prerrequisitos
@@ -19,34 +19,34 @@ Prerrequisitos
 
 # Uso de la API
 ## Buscar una palabra en un documento - GET
-A esta función se accede mediante el endpoint /search-in-doc/:id, en donde :id represanta el código de identificación del archivo en Google Drive.
+A esta función se accede mediante el endpoint **/search-in-doc/:id**, en donde :id represanta el código de identificación del archivo en Google Drive.
 
 ## Parámetros:
 word: una cadena de texto que será buscada en el archivo
 
 ## Posibles respuestas HTTP:
-* HTTP/1.1 200 SE ENCONTRÓ: La palabra especificada fue hallada en el archivo
-* HTTP/1.1 400 POR FAVOR INCLUYA UNA PALABRA A BUSCAR: No se coloco parametro de busqueda
-* HTTP/1.1 404 PALABRA NO ENCONTRADA: Palabra no encontrada en el archivo
-* HTTP/1.1 404 ARCHIVO NO ENCONTRADO: No se encontro ningun archivo asociado al codigo de identificaciòn provisto
-* HTTP/1.1 401 Para obtener acceso a su cuenta de Drive y habilitar la API diríjase al índice de la página: Este error es causado cuando la autorización para acceder a la cuenta caduca o no fue realizada aún, lo cual se soluciona accediendo al índice.
+* **HTTP/1.1 200 SE ENCONTRÓ**: La palabra especificada fue hallada en el archivo
+* **HTTP/1.1 400 POR FAVOR INCLUYA UNA PALABRA A BUSCAR**: No se coloco parametro de busqueda
+* **HTTP/1.1 404 PALABRA NO ENCONTRADA**: Palabra no encontrada en el archivo
+* **HTTP/1.1 404 ARCHIVO NO ENCONTRADO**: No se encontro ningun archivo asociado al codigo de identificaciòn provisto
+* **HTTP/1.1 401 Para obtener acceso a su cuenta de Drive y habilitar la API diríjase al índice de la página**: Este error es causado cuando la autorización para acceder a la cuenta caduca o no fue realizada aún, lo cual se soluciona accediendo al índice.
 
 # Crear un nuevo archivo - POST
-A esta función se accede mediante el endpoint /file y sirve para crear un nuevo archivo. De cada archivo creado en Google Drive se guarda una copia local en la carpeta files, dentro de la carpeta en donde sea ejecutado el servidor.
+A esta función se accede mediante el endpoint **/file** y sirve para crear un nuevo archivo. De cada archivo creado en Google Drive se guarda una copia local en la carpeta files, dentro de la carpeta en donde sea ejecutado el servidor.
 
 ## Parámetros:
 Los parámetros deberan estar alojados en los datos de formulario de la solicitud
 
-* titulo: El título o nombre del nuevo archivo
-* descripcion: El contenido del nuevo archivo
+* **titulo**: El título o nombre del nuevo archivo
+* **descripcion**: El contenido del nuevo archivo
 
 ## Posibles respuestas HTTP:
-* HTTP/1.1 400 PARÁMETROS INCORRECTOS: No existen los parametros titulo o descripcion en la solicitud POST.
-* HTTP/1.1 200 NUEVO ARCHIVO CREADO
+* **HTTP/1.1 400 PARÁMETROS INCORRECTOS**: No existen los parametros titulo o descripcion en la solicitud POST.
+* **HTTP/1.1 200 NUEVO ARCHIVO CREADO**
 {'id':id, 'titulo': titulo, 'descripcion': descripcion }
 Indica la creación exitosa del archivo y devuelve sus datos principales.
-* HTTP/1.1 401 Para obtener acceso a su cuenta de Drive y habilitar la API diríjase al índice de la página: Este error es causado cuando la autorización para acceder a la cuenta caduca o no fue realizada aún, lo cual se soluciona accediendo al índice.
-* HTTP/1.1 500 ERROR EN LA CONEXIÓN: Indica un error en la conexion con la API de Google Drive, puede ser causado al caducir la autorización de acceso, lo cual se soluciona accediendo al índice.
+* **HTTP/1.1 401 Para obtener acceso a su cuenta de Drive y habilitar la API diríjase al índice de la página**: Este error es causado cuando la autorización para acceder a la cuenta caduca o no fue realizada aún, lo cual se soluciona accediendo al índice.
+* **HTTP/1.1 500 ERROR EN LA CONEXIÓN**: Indica un error en la conexion con la API de Google Drive, puede ser causado al caducir la autorización de acceso, lo cual se soluciona accediendo al índice.
 
 # Funciones utilizadas en el desarrollo
 ## Vistas
