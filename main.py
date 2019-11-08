@@ -88,7 +88,7 @@ def search_in_doc(id):
 
                 ### ESTA VARIBLE SIRVE PARA FILTRAR LA QUERY USANDO EL FORMATO PROPORCIONADO POR GOOOGLE
 
-                querystring = "fullText contains '{}'".format(request.args.get('word')) #lo que esta entre llaves se reemplaza por word...
+                querystring = "fullText contains '{}'".format(request.args.get('word'))
 
                 ### BUSCAMOS TODOS LOS ARCHIVOS QUE CONTENGAN LA PALABRA QUE QUEREMOS FILTRAR
 
@@ -162,7 +162,7 @@ def file():
                     'mimeType': 'text/plain'
                 }
 
-                ### ESTAS TRES LINEAS CREAN EL RESPALDO FÍSICO DEL ARCHIVO A SUBIR CON SU NOMBRE Y CONTENIDO Y LO GUARDAN EN LA CARPETA files ------ se crea el archivo en la carpeta del proyecto
+                ### ESTAS TRES LINEAS CREAN EL RESPALDO FÍSICO DEL ARCHIVO A SUBIR CON SU NOMBRE Y CONTENIDO Y LO GUARDAN EN LA CARPETA files
                 newfiledata = open('files/{} - {}.txt'.format(request.form['titulo'], newid['ids'][0]), 'w')
                 newfiledata.write(request.form['descripcion'])
                 newfiledata.close()
